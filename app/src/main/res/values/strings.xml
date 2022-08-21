@@ -7,4 +7,6 @@
     <string name="sign_in">Sign In</string>
     <string name="forgot_password"><font color="#FF6200EE">Forgot Password?</font></string>
     <string name="log_in"><b>LOG IN</b></string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="submit">Submit</string>
 </resources>

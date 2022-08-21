@@ -14,6 +14,10 @@
         android:theme="@style/Theme.FriendsChat"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendsChat.NoActionbar" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.FriendsChat.NoActionbar"/>

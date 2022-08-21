@@ -18,10 +18,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.signUp.setOnClickListener(this::signUp);
+        binding.forgot.setOnClickListener(this::forgotPass);
     }
 
     private void signUp(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    private void forgotPass(View view) {
+        Intent intent = new Intent(LoginActivity.this, ForgotActivity.class);
         startActivity(intent);
     }
 }
