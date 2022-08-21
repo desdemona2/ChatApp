@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Friends Chat</string>
     <string name="enter_username">Enter Username</string>
+    <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
     <string name="forgot_password"><font color="#FF6200EE">Forgot Password?</font></string>
+    <string name="log_in"><b>LOG IN</b></string>
 </resources>
