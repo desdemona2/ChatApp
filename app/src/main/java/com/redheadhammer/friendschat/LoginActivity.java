@@ -62,26 +62,28 @@ public class LoginActivity extends AppCompatActivity {
     private void signInProcess(String username, String password) {
         firebaseAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                try {
-                                    throw Objects.requireNonNull(task.getException());
-                                } catch (FirebaseAuthInvalidUserException e) {
-                                    Toast.makeText(LoginActivity.this, R.string.not_registered,
-                                            Toast.LENGTH_SHORT).show();
-                                } catch (FirebaseAuthInvalidCredentialsException invalid) {
-                                    Toast.makeText(LoginActivity.this,
-                                            R.string.email_bad_format, Toast.LENGTH_LONG).show();
-                                } catch (Exception exception) {
-                                    Log.d(TAG, "onComplete: " + exception);
-                                    Toast.makeText(LoginActivity.this,
-                                            R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                                }
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            try {
+                                throw Objects.requireNonNull(task.getException());
+                            } catch (FirebaseAuthInvalidUserException e) {
+                                Toast.makeText(LoginActivity.this, e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (FirebaseAuthInvalidCredentialsException invalid) {
+                                Log.d(TAG, "signInProcess: " + invalid);
+                                String message = invalid.getMessage();
+                                Toast.makeText(LoginActivity.this,
+                                        message, Toast.LENGTH_LONG).show();
+                            } catch (Exception exception) {
+                                Log.d(TAG, "onComplete: " + exception);
+                                Toast.makeText(LoginActivity.this,
+                                        R.string.error_occurred, Toast.LENGTH_SHORT).show();
                             }
                         }
+                    }
                 );
     }
 
