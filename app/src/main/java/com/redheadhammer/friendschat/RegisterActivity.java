@@ -57,8 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void signUp(View view) {
-        binding.progressBar.setVisibility(View.VISIBLE);
-
         String email = String.valueOf(binding.emailRegister.getText());
         String password = String.valueOf(binding.passwordRegister.getText());
         String username = String.valueOf(binding.userNameRegister.getText());
@@ -67,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.empty_upass,
                     Toast.LENGTH_SHORT).show();
         } else {
+            binding.progressBar.setVisibility(View.VISIBLE);
             signUpProcess(email, password, username);
         }
     }
