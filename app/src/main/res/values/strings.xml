@@ -15,4 +15,5 @@
     <string name="empty_upass">Enter valid username/password</string>
     <string name="database_upload_success">Upload to database is Successful</string>
     <string name="upload_database_fail">Failed to upload image in database</string>
+    <string name="forgot_email_sent">An email has been sent to you</string>
 </resources>
