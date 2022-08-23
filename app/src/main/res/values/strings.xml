@@ -9,4 +9,10 @@
     <string name="log_in"><b>LOG IN</b></string>
     <string name="forgot_pass">Forgot Password</string>
     <string name="submit">Submit</string>
+    <string name="not_registered">There is no user record corresponding to this identifier</string>
+    <string name="email_bad_format">The email address doesn\'t exist or is badly formatted</string>
+    <string name="error_occurred">Some Error Occurred</string>
+    <string name="empty_upass">Enter valid username/password</string>
+    <string name="database_upload_success">Upload to database is Successful</string>
+    <string name="upload_database_fail">Failed to upload image in database</string>
 </resources>

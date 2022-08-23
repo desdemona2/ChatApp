@@ -7,6 +7,7 @@
     tools:context=".RegisterActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
@@ -18,7 +19,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/purple_200"
             app:title="@string/sign_up"
-            app:expandedTitleGravity="bottom|end"
+            app:expandedTitleGravity="top|start"
             app:expandedTitleTextColor="@color/white">
 
             <ImageView
@@ -90,8 +91,8 @@
                     android:id="@+id/passwordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="@string/enter_password" />
+                    android:hint="@string/enter_password"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -112,6 +113,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/signUpRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -120,6 +122,16 @@
                 app:layout_constraintHorizontal_bias="0.85"
                 app:layout_constraintStart_toStartOf="@id/userNameWrapperRegister"
                 app:layout_constraintTop_toBottomOf="@id/userNameWrapperRegister" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
