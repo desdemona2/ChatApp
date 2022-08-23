@@ -52,20 +52,20 @@
                 android:id="@+id/userNameWrapper"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="65dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginHorizontal="30dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/userName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/enter_username"
-                    android:minEms="6"
+                    android:inputType="textEmailAddress"
                     android:maxEms="10"
-                    android:inputType="textEmailAddress"/>
+                    android:minEms="6" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,53 +74,61 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="@id/userNameWrapper"
+                app:endIconMode="password_toggle"
                 app:layout_constraintEnd_toEndOf="@id/userNameWrapper"
-                app:layout_constraintTop_toBottomOf="@id/userNameWrapper"
-                app:endIconMode="password_toggle">
+                app:layout_constraintStart_toStartOf="@id/userNameWrapper"
+                app:layout_constraintTop_toBottomOf="@id/userNameWrapper">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/enter_password"
-                    android:minEms="8"
+                    android:inputType="textPassword"
                     android:maxEms="12"
-                    android:inputType="textPassword"/>
+                    android:minEms="8" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/signUp"
-                android:text="@string/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:text="@string/sign_up"
                 app:layout_constraintStart_toStartOf="@id/passwordWrapper"
-                app:layout_constraintTop_toBottomOf="@id/passwordWrapper"
-                />
+                app:layout_constraintTop_toBottomOf="@id/passwordWrapper" />
 
             <Button
                 android:id="@+id/signIn"
-                android:text="@string/sign_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/sign_in"
                 app:layout_constraintEnd_toEndOf="@id/passwordWrapper"
-                app:layout_constraintTop_toTopOf="@id/signUp"
-                />
+                app:layout_constraintTop_toTopOf="@id/signUp" />
 
             <TextView
                 android:id="@+id/forgot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/signUp"
                 android:layout_marginTop="50dp"
+                android:text="@string/forgot_password"
                 android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.75"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/signUp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

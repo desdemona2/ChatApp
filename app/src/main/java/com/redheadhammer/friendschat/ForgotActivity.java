@@ -38,6 +38,7 @@ public class ForgotActivity extends AppCompatActivity {
         } else {
             forgotPassProcess(email);
             binding.progressBar.setVisibility(View.VISIBLE);
+            binding.submit.setClickable(false);
         }
     }
 
@@ -50,12 +51,9 @@ public class ForgotActivity extends AppCompatActivity {
                     } else {
                         try {
                             throw Objects.requireNonNull(task.getException());
-                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                        } catch (FirebaseAuthInvalidCredentialsException | FirebaseAuthInvalidUserException e) {
                             Toast.makeText(this,
-                                    R.string.email_bad_format, Toast.LENGTH_SHORT).show();
-                        } catch (FirebaseAuthInvalidUserException e) {
-                            Toast.makeText(this, R.string.not_registered,
-                                    Toast.LENGTH_SHORT).show();
+                                    e.getMessage(), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Log.d(TAG, "onComplete: " + e);
                             Toast.makeText(this,
@@ -63,6 +61,7 @@ public class ForgotActivity extends AppCompatActivity {
                         }
                     }
                     binding.progressBar.setVisibility(View.GONE);
+                    binding.submit.setClickable(true);
                 });
     }
 }

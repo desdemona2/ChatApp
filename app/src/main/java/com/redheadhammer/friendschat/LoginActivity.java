@@ -21,7 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private FirebaseAuth firebaseAuth;
     private static final String TAG = "LoginActivity";
-    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.empty_upass,
                     Toast.LENGTH_SHORT).show();
         } else {
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.signIn.setClickable(false);
             signInProcess(username, password);
         }
     }
@@ -83,6 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                                         R.string.error_occurred, Toast.LENGTH_SHORT).show();
                             }
                         }
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.signIn.setClickable(true);
                     }
                 );
     }
@@ -90,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);

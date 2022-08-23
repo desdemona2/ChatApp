@@ -66,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             binding.progressBar.setVisibility(View.VISIBLE);
+            binding.signUpRegister.setClickable(false);
             signUpProcess(email, password, username);
         }
     }
@@ -88,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Create user in the database
                                 reference.child("Users")
-                                        .child(firebaseAuth.getUid())
+                                        .child(Objects.requireNonNull(firebaseAuth.getUid()))
                                         .child("username")
                                         .setValue(username);
 
@@ -122,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             .setValue("null");
                                 }
                                 binding.progressBar.setVisibility(View.GONE);
+                                binding.signUpRegister.setClickable(true);
                                 Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
@@ -131,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     throw Objects.requireNonNull(task.getException());
                                 } catch (FirebaseAuthInvalidCredentialsException e) {
                                     Toast.makeText(this,
-                                            R.string.email_bad_format, Toast.LENGTH_SHORT).show();
+                                            e.getMessage(), Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     Toast.makeText(RegisterActivity.this,
                                             R.string.error_occurred, Toast.LENGTH_SHORT).show();
