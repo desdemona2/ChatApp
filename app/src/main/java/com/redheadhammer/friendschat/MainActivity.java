@@ -44,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         getUsername();
         getUsers();
-
-        itemViewAdapter = new RecyclerItemView(userList, username, this);
-        binding.recycler.setLayoutManager(new LinearLayoutManager(this));
-
-        binding.recycler.setAdapter(itemViewAdapter);
     }
 
     private void getUsername() {
@@ -57,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         username = String.valueOf(snapshot.getValue());
+
+                        // causing nullPointerException in onCreate as loading username from database
+                        // was taking time so was passing null as username to adapter
+                        itemViewAdapter = new RecyclerItemView(userList, username, MainActivity.this);
+                        binding.recycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+                        binding.recycler.setAdapter(itemViewAdapter);
                     }
 
                     @Override
