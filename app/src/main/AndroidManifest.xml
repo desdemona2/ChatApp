@@ -14,19 +14,23 @@
         android:theme="@style/Theme.FriendsChat"
         tools:targetApi="31">
         <activity
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendsChat.NoActionbar"/>
+        <activity
             android:name=".ProfileUpdateActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ForgotActivity"
             android:exported="false"
-            android:theme="@style/Theme.FriendsChat.NoActionbar"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/Theme.FriendsChat.NoActionbar" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.FriendsChat.NoActionbar"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/Theme.FriendsChat.NoActionbar" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
