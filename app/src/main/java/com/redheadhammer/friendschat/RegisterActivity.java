@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,9 +32,9 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference reference;
+    private final DatabaseReference reference = database.getReference();
     private final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-    private StorageReference storageReference;
+    private final StorageReference storageReference = firebaseStorage.getReference();
     private boolean isImageSelected = false;
     private Uri imageUri;
 
@@ -44,8 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        reference = database.getReference();
-        storageReference = firebaseStorage.getReference();
+
         chooseImageLauncherInit();
 
         Log.d(TAG, "onCreate: " + reference.toString());
@@ -84,64 +84,75 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void signUpProcess(String email, String password, String username) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                // Create user in the database
-                                reference.child("Users")
-                                        .child(Objects.requireNonNull(firebaseAuth.getUid()))
-                                        .child("username")
-                                        .setValue(username);
+            .addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful()) {
+                        // Create user in the database
+                        reference.child("Users")
+                                .child(Objects.requireNonNull(firebaseAuth.getUid()))
+                                .child("username")
+                                .setValue(username);
 
-                                // if image is selected than save it to the storage and
-                                // save reference of image in database to load later
-                                if (isImageSelected) {
-                                    UUID randomId = UUID.randomUUID();
-                                    String imageName = String.format("images/%s.jpg", randomId);
-                                    // put image in Firebase Storage
-                                    storageReference.child(imageName).putFile(imageUri)
-                                            .addOnSuccessListener(uri -> {
-                                                String filePath = uri.toString();
-                                                reference.child("Users")
-                                                        .child(firebaseAuth.getUid())
-                                                        .child("image")
-                                                        .setValue(filePath)
-                                                        .addOnCompleteListener(task1 -> {
-                                                            if (task1.isSuccessful()) {
-                                                                Toast.makeText(this,
-                                                                        R.string.database_upload_success, Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                Toast.makeText(this,
-                                                                        R.string.upload_database_fail, Toast.LENGTH_SHORT).show();
-                                                            }
-                                                            });
-                                            });
-                                } else {
-                                    reference.child("Users")
-                                            .child(firebaseAuth.getUid())
-                                            .child("image")
-                                            .setValue("null");
-                                }
-                                binding.progressBar.setVisibility(View.GONE);
-                                binding.signUpRegister.setClickable(true);
-                                Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                try {
-                                    throw Objects.requireNonNull(task.getException());
-                                } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    Toast.makeText(this,
-                                            e.getMessage(), Toast.LENGTH_SHORT).show();
-                                } catch (Exception e) {
-                                    Toast.makeText(RegisterActivity.this,
-                                            R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                                }
-                                binding.progressBar.setVisibility(View.GONE);
-                            }
+                        // if image is selected than save it to the storage and
+                        // save reference of image in database to load later
+                        if (isImageSelected) {
+                            UUID fileId = UUID.randomUUID();
+                            final String filename = String.format("images/%s.jpg", fileId);
+                            // save image in firebase storage
+                            saveImageInStorage(filename);
+                        } else {
+                            reference.child("Users")
+                                .child(firebaseAuth.getUid())
+                                .child("image")
+                                .setValue("null");
                         }
-                );
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.signUpRegister.setClickable(true);
+                        Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        try {
+                            throw Objects.requireNonNull(task.getException());
+                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                            Toast.makeText(this,
+                                    e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(RegisterActivity.this,
+                                    R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                        }
+                        binding.progressBar.setVisibility(View.GONE);
+                    }
+                }
+            );
+    }
+
+    private void saveImageInStorage(String fileName) {
+        storageReference.child(fileName).putFile(imageUri).addOnSuccessListener(
+                snapshot -> {
+                    // get storage reference for the image file
+                    StorageReference imageReference = firebaseStorage.getReference(fileName);
+                    // save the image url to the firebase database section to index it later
+                    imageReference.getDownloadUrl().addOnSuccessListener(uri ->
+                            reference.child("Users")
+                                    .child(Objects.requireNonNull(firebaseAuth.getUid()))
+                            .child("image").setValue(uri.toString()));
+                }
+        ).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, R.string.database_upload_success, Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    throw Objects.requireNonNull(task.getException());
+                } catch (FirebaseAuthUserCollisionException | FirebaseAuthInvalidCredentialsException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.d(TAG, "saveImageInStorage: " + e.getMessage());
+                    Toast.makeText(this, R.string.upload_database_fail, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void chooseImageLauncherInit() {
