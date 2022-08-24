@@ -14,4 +14,6 @@
     <string name="upload_database_fail">Failed to upload image in database</string>
     <string name="forgot_email_sent">An email has been sent to you</string>
     <string name="update_user">Update User</string>
+    <string name="image_load_failed">Load default Image Failed</string>
+    <string name="load_image_success">Image Loaded Successfully</string>
 </resources>
